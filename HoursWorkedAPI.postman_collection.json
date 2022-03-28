@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "09ea9028-d17c-4de9-85a9-31d4020f0aad",
+		"name": "HoursWorkedAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "UserCreate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"Email\": \"mail@mail.ru\", \r\n    \"LastName\": \"Фамилия\", \r\n    \"FirstName\": \"Имя\", \r\n    \"MiddleName\": \"Отчество\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/users/create",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"users",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/users/getall",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"users",
+								"getall"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/users/delete/1ae5751c-3de6-4583-bac7-f1f0ef28718e",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"users",
+								"delete",
+								"1ae5751c-3de6-4583-bac7-f1f0ef28718e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserUpdate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"bdbcf21d-5d87-4666-a949-c8688462cea1\",\r\n    \"email\": \"mail@mail.com\",\r\n    \"lastName\": \"Фамилия\",\r\n    \"firstName\": \"Имя\",\r\n    \"middleName\": \"Отчество\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/users/update",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"users",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "ReportCreate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"UserId\": \"5b229cd5-310c-4bd6-b2c5-bda25599040f\", \r\n    \"Note\": \"Примечание\", \r\n    \"NumberOfHours\": 2, \r\n    \"Date\": \"2022-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/WorkReport/create",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"WorkReport",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReportDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/WorkReport/delete/92b49bb9-0737-4253-bd25-d41f96bb9edb",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"WorkReport",
+								"delete",
+								"92b49bb9-0737-4253-bd25-d41f96bb9edb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReportUpdate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"Id\": \"e7e2e247-9d2b-450a-8346-ef10cf4fe940\",\r\n    \"UserId\": \"310469c5-a684-4240-a297-b1bc2a59bc65\", \r\n    \"Note\": \"Примечание\", \r\n    \"NumberOfHours\": 5, \r\n    \"Date\": \"2022-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/WorkReport/update",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"WorkReport",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReportGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/WorkReport/get/cea03c7e-b91e-4574-86a5-d82894ace41e/2022-01-12",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"WorkReport",
+								"get",
+								"cea03c7e-b91e-4574-86a5-d82894ace41e",
+								"2022-01-12"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
