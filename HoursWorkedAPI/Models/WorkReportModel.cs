@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HoursWorkedAPI.Models
 {
-    public class WorkReport
+    public class WorkReportModel
     {
         [Required]
         public Guid Id { get; set; }

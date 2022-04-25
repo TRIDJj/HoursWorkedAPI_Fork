@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using HoursWorkedAPI.DBData.Database;
 using HoursWorkedAPI.DBData.DTOModels;
 using HoursWorkedAPI.Models;
-using HoursWorkedAPI.Repository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using HoursWorkedAPI.Repositories.Interfaces;
 
-namespace HoursWorkedAPI.Repository.Logics
+namespace HoursWorkedAPI.Repositories.Logics
 {
     public class WorkReportRepository : IWorkReportRepository
     {
@@ -27,7 +27,7 @@ namespace HoursWorkedAPI.Repository.Logics
         /// При успешном создании записи возвращает строку с id записи.
         /// Иначе возвращает ошибку.
         /// </returns>
-        public string Create(WorkReport work)
+        public string Create(WorkReportModel work)
         {
              try
              {
@@ -78,10 +78,10 @@ namespace HoursWorkedAPI.Repository.Logics
         /// <returns>
         /// Возвращает список работ пользователя за месяц.
         /// </returns>
-        public List<WorkReport> Get(Guid id, DateTime dateBegin, DateTime dateEnd)
+        public List<WorkReportModel> Get(Guid id, DateTime dateBegin, DateTime dateEnd)
         {
             var listWorkDTO = context.WorkReports.Where(x => x.UserId == id && x.Date >= dateBegin && x.Date <= dateEnd).ToList();
-            var listWork = mapper.Map<List<WorkReport>>(listWorkDTO);
+            var listWork = mapper.Map<List<WorkReportModel>>(listWorkDTO);
             return listWork;
         }
 
@@ -93,7 +93,7 @@ namespace HoursWorkedAPI.Repository.Logics
         /// При успешном создании записи возвращает строку с id записи.
         /// Иначе возвращает ошибку.
         /// </returns>
-        public string Update(WorkReport work)
+        public string Update(WorkReportModel work)
         {
             try
             {

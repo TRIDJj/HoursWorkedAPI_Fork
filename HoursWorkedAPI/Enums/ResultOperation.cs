@@ -1,4 +1,4 @@
-﻿namespace HoursWorkedAPI.Models
+﻿namespace HoursWorkedAPI.Enums
 {
     public enum ResultOperation
     {

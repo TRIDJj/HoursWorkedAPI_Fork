@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HoursWorkedAPI.Enums;
 
-namespace HoursWorkedAPI.Models
+namespace HoursWorkedAPI.DTO.Responses
 {
-    public class MainResponse
-    {
-        public ResultOperation ResultCode { get; set; }
-    }
-
-    public class ResultResponse<T> : MainResponse
+    public class ResultResponse<T> : BaseResponse
     {
         public virtual T Result { get; set; }
 
@@ -41,5 +32,5 @@ namespace HoursWorkedAPI.Models
                 ResultCode = ResultOperation.DataError
             };
         }
-    } 
+    }
 }

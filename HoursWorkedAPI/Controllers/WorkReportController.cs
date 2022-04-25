@@ -1,18 +1,21 @@
 ﻿using HoursWorkedAPI.Models;
-using HoursWorkedAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using HoursWorkedAPI.DTO.Requests;
+using HoursWorkedAPI.DTO.Responses;
+using HoursWorkedAPI.Repositories.Interfaces;
 
 namespace HoursWorkedAPI.Controllers
 {
     [ApiController]
     public class WorkReportController : Controller
     {
-        IWorkReportRepository workReportRepository;
-        public WorkReportController(IWorkReportRepository workReportRepository, IUserRepository userRepository)
+        private readonly IWorkReportRepository _workReportRepository;
+
+        public WorkReportController(IWorkReportRepository workReportRepository)
         {
-            this.workReportRepository = workReportRepository;
+            _workReportRepository = workReportRepository;
         }
 
         /// <summary>
@@ -42,18 +45,18 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpGet]
         [Route("/api/users/{user-id}/work-reports")]
-        public ActionResult<MainResponse> Get([FromRoute(Name = "user-id")]Guid userId, [FromQuery (Name = "date-begin")] DateTime dateBegin, [FromQuery(Name = "date-end")] DateTime dateEnd)
+        public ActionResult<BaseResponse> Get(WorkReportGetRequest request)
         {
             try
             {
-                var result = workReportRepository.Get(userId, dateBegin, dateEnd);
+                var result = _workReportRepository.Get(request.UserId, request.DateBegin, request.DateEnd);
                 if (result.Count == 0)
                 {
                     return ResultResponse<string>.GetEmptyResultResponse("Не найдены значения в базе");
                 }
                 else
                 {
-                    return ResultResponse<List<WorkReport>>.GetSuccessResponse(result);
+                    return ResultResponse<List<WorkReportModel>>.GetSuccessResponse(result);
                 }
             }
             catch (Exception e)
@@ -83,20 +86,20 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpPost]
         [Route("/api/users/{user-id}/work-reports")]
-        public ActionResult<MainResponse> Create([FromRoute(Name = "user-id")] Guid userId, WorkReport workReport)
+        public ActionResult<BaseResponse> Create(WorkReportCreateRequest request)
         {
-            if (string.IsNullOrEmpty(workReport.Note))
+            if (string.IsNullOrEmpty(request.WorkReport.Note))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передано пустое примечание");
             }
-            if (workReport.NumberOfHours == 0)
+            if (request.WorkReport.NumberOfHours == 0)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Кол-во часов должн быть > 0");
             }
             try
             {
-                workReport.UserId = userId;
-                var result = workReportRepository.Create(workReport);
+                request.WorkReport.UserId = request.UserId;
+                var result = _workReportRepository.Create(request.WorkReport);
 
                 if (result.Contains("Ошибка:"))
                 {
@@ -123,15 +126,15 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpDelete]
         [Route("/api/users/{user-id}/work-reports/{report-id}")]
-        public ActionResult<MainResponse> Delete([FromRoute(Name = "user-id")] Guid userId, [FromRoute(Name = "report-id")] Guid reportId)
+        public ActionResult<BaseResponse> Delete(WorkReportDeleteRequest request)
         {
-            if (reportId == Guid.Empty)
+            if (request.ReportId == Guid.Empty)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id");
             }
             try
             {
-                var result = workReportRepository.Delete(reportId);
+                var result = _workReportRepository.Delete(request.ReportId);
                 if (result.Contains("Ошибка:"))
                 {
                     return ResultResponse<string>.GetErrorResultResponse(result);
@@ -166,21 +169,21 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpPut]
         [Route("/api/users/{userId}/work-reports/{reportId}")]
-        public ActionResult<MainResponse> Update(Guid userId, Guid reportId, WorkReport workReport)
+        public ActionResult<BaseResponse> Update(WorkReportUpdateRequest request)
         {
-            if (string.IsNullOrEmpty(workReport.Note))
+            if (string.IsNullOrEmpty(request.WorkReport.Note))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передано пустое примечание");
             }
-            if (workReport.NumberOfHours == 0)
+            if (request.WorkReport.NumberOfHours == 0)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Кол-во часов должн быть > 0");
             }
             try
             {
-                workReport.Id = reportId;
-                workReport.UserId = userId;
-                var result = workReportRepository.Update(workReport);
+                request.WorkReport.Id = request.ReportId;
+                request.WorkReport.UserId = request.UserId;
+                var result = _workReportRepository.Update(request.WorkReport);
 
                 if (result.Contains("Ошибка:"))
                 {

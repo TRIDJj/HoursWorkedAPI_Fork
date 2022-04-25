@@ -1,19 +1,22 @@
 ﻿using HoursWorkedAPI.Models;
-using HoursWorkedAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using HoursWorkedAPI.DTO.Requests;
+using HoursWorkedAPI.DTO.Responses;
+using HoursWorkedAPI.Repositories.Interfaces;
 
 namespace HoursWorkedAPI.Controllers
 {
     [ApiController]
     public class UserController : Controller
     {
-        IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
+        
         public UserController(IUserRepository userRepository)
         {
-            this.userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -35,18 +38,18 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpGet]
         [Route("/api/users")]
-        public ActionResult<MainResponse> Get()
+        public ActionResult<BaseResponse> Get()
         {
             try
             {
-                var result = userRepository.Get();
+                var result = _userRepository.Get();
                 if (result.Count == 0)
                 {
                     return ResultResponse<string>.GetEmptyResultResponse("Не найдены значения в базе");
                 }
                 else
                 {
-                    return ResultResponse<List<User>>.GetSuccessResponse(result);
+                    return ResultResponse<List<UserModel>>.GetSuccessResponse(result);
                 }
             }
             catch (Exception e)
@@ -77,28 +80,27 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpPost]
         [Route("/api/users")]
-        public ActionResult<MainResponse> Create(User user)
+        public ActionResult<BaseResponse> Create(UserCreateRequest request)
         {
-            if (string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrEmpty(request.User.Email))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Ошибка: Передан пустой Email");
             }
-            if (!new EmailAddressAttribute().IsValid(user.Email))
+            if (!new EmailAddressAttribute().IsValid(request.User.Email))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Не верный формат Email");
             }
-            if (string.IsNullOrEmpty(user.LastName))
+            if (string.IsNullOrEmpty(request.User.LastName))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Ошибка: Передана пустая Фамилия");
             }
-            if (string.IsNullOrEmpty(user.FirstName))
+            if (string.IsNullOrEmpty(request.User.FirstName))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Ошибка: Передано пустое Имя");
             }
             try
             {
-
-                var result = userRepository.Create(user);
+                var result = _userRepository.Create(request.User);
 
                 if (result.Contains("Ошибка:"))
                 { 
@@ -125,15 +127,15 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpDelete]
         [Route("/api/users/{id}")]
-        public ActionResult<MainResponse> Delete(Guid id)
+        public ActionResult<BaseResponse> Delete(UserDeleteRequest request)
         {
-            if (id == null)
+            if (request.Id == null)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id");
             }
             try
             {
-                 var result = userRepository.Delete(id);
+                 var result = _userRepository.Delete(request.Id);
                  if (result.Contains("Ошибка:"))
                  {
                      return ResultResponse<string>.GetErrorResultResponse(result);
@@ -167,32 +169,32 @@ namespace HoursWorkedAPI.Controllers
         /// </returns>
         [HttpPut]
         [Route("/api/users/{id}")]
-        public ActionResult<MainResponse> Update(Guid id, User user)
+        public ActionResult<BaseResponse> Update(UserUpdateRequest request)
         {
-            if (id == Guid.Empty)
+            if (request.Id == Guid.Empty)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id пользователя");
             }
-            if (string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrEmpty(request.User.Email))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передан пустой Email");
             }
-            if(!new EmailAddressAttribute().IsValid(user.Email))
+            if(!new EmailAddressAttribute().IsValid(request.User.Email))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Не верный формат Email");
             }
-            if (string.IsNullOrEmpty(user.LastName))
+            if (string.IsNullOrEmpty(request.User.LastName))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передана пустая Фамилия");
             }
-            if (string.IsNullOrEmpty(user.FirstName))
+            if (string.IsNullOrEmpty(request.User.FirstName))
             {
                return ResultResponse<string>.GetEmptyResultResponse("Передано пустое Имя");
             }
             try
             {
-                user.UserId = id;
-                var result = userRepository.Update(user);
+                request.User.UserId = request.Id;
+                var result = _userRepository.Update(request.User);
                   
                 if (result.Contains("Ошибка:"))
                 {

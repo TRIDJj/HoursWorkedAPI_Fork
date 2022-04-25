@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using HoursWorkedAPI.DBData.Database;
 using HoursWorkedAPI.DBData.DTOModels;
 using HoursWorkedAPI.Models;
-using HoursWorkedAPI.Repository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using HoursWorkedAPI.Repositories.Interfaces;
 
-namespace HoursWorkedAPI.Repository.Logics
+namespace HoursWorkedAPI.Repositories.Logics
 {
     public class UserRepository : IUserRepository
     {
@@ -27,7 +27,7 @@ namespace HoursWorkedAPI.Repository.Logics
         /// При успешном создании записи возвращает строку с id записи.
         /// Иначе возвращает ошибку.
         /// </returns>
-        public string Create(User user)
+        public string Create(UserModel user)
         {
             try
             {
@@ -76,10 +76,10 @@ namespace HoursWorkedAPI.Repository.Logics
         /// <returns>
         /// Возвращает список всех пользовалетей.
         /// </returns>
-        public List<User> Get()
+        public List<UserModel> Get()
         {
             var listUserDTO = context.Users.ToList();
-            var listUser = mapper.Map<List<User>>(listUserDTO);
+            var listUser = mapper.Map<List<UserModel>>(listUserDTO);
             return listUser;
         }
 
@@ -91,7 +91,7 @@ namespace HoursWorkedAPI.Repository.Logics
         /// При успешном создании записи возвращает строку с id записи.
         /// Иначе возвращает ошибку.
         /// </returns>
-        public string Update(User user)
+        public string Update(UserModel user)
         {
             try
             {

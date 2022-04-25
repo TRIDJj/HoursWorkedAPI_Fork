@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace HoursWorkedAPI.Models
 {   
-    public class User
+    public class UserModel
     {
         [Required]
         public Guid UserId { get; set; }
