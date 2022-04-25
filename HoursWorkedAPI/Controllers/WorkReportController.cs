@@ -41,12 +41,12 @@ namespace HoursWorkedAPI.Controllers
         /// }
         /// </returns>
         [HttpGet]
-        [Route("/api/WorkReport/get/{id}/{date}")]
-        public ActionResult<MainResponse> Get(Guid id, DateTime date)
+        [Route("/api/users/{user-id}/work-reports")]
+        public ActionResult<MainResponse> Get([FromRoute(Name = "user-id")]Guid userId, [FromQuery (Name = "date-begin")] DateTime dateBegin, [FromQuery(Name = "date-end")] DateTime dateEnd)
         {
             try
             {
-                var result = workReportRepository.Get(id, date);
+                var result = workReportRepository.Get(userId, dateBegin, dateEnd);
                 if (result.Count == 0)
                 {
                     return ResultResponse<string>.GetEmptyResultResponse("Не найдены значения в базе");
@@ -82,8 +82,8 @@ namespace HoursWorkedAPI.Controllers
         /// }
         /// </returns>
         [HttpPost]
-        [Route("/api/WorkReport/create")]
-        public ActionResult<MainResponse> Create(WorkReport workReport)
+        [Route("/api/users/{user-id}/work-reports")]
+        public ActionResult<MainResponse> Create([FromRoute(Name = "user-id")] Guid userId, WorkReport workReport)
         {
             if (string.IsNullOrEmpty(workReport.Note))
             {
@@ -95,7 +95,7 @@ namespace HoursWorkedAPI.Controllers
             }
             try
             {
-
+                workReport.UserId = userId;
                 var result = workReportRepository.Create(workReport);
 
                 if (result.Contains("Ошибка:"))
@@ -122,16 +122,16 @@ namespace HoursWorkedAPI.Controllers
         /// }
         /// </returns>
         [HttpDelete]
-        [Route("/api/WorkReport/delete/{id}")]
-        public ActionResult<MainResponse> Delete(Guid id)
+        [Route("/api/users/{user-id}/work-reports/{report-id}")]
+        public ActionResult<MainResponse> Delete([FromRoute(Name = "user-id")] Guid userId, [FromRoute(Name = "report-id")] Guid reportId)
         {
-            if (id == null)
+            if (reportId == Guid.Empty)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id");
             }
             try
             {
-                var result = workReportRepository.Delete(id);
+                var result = workReportRepository.Delete(reportId);
                 if (result.Contains("Ошибка:"))
                 {
                     return ResultResponse<string>.GetErrorResultResponse(result);
@@ -164,14 +164,10 @@ namespace HoursWorkedAPI.Controllers
         /// "resultCode": Код сообщения
         /// }
         /// </returns>
-        [HttpPost]
-        [Route("/api/WorkReport/update")]
-        public ActionResult<MainResponse> Update(WorkReport workReport)
+        [HttpPut]
+        [Route("/api/users/{userId}/work-reports/{reportId}")]
+        public ActionResult<MainResponse> Update(Guid userId, Guid reportId, WorkReport workReport)
         {
-            if (workReport.UserId == Guid.Empty)
-            {
-                return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id пользователя");
-            }
             if (string.IsNullOrEmpty(workReport.Note))
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передано пустое примечание");
@@ -182,6 +178,8 @@ namespace HoursWorkedAPI.Controllers
             }
             try
             {
+                workReport.Id = reportId;
+                workReport.UserId = userId;
                 var result = workReportRepository.Update(workReport);
 
                 if (result.Contains("Ошибка:"))

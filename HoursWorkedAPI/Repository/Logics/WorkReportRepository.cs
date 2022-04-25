@@ -78,12 +78,9 @@ namespace HoursWorkedAPI.Repository.Logics
         /// <returns>
         /// Возвращает список работ пользователя за месяц.
         /// </returns>
-        public List<WorkReport> Get(Guid id, DateTime date)
+        public List<WorkReport> Get(Guid id, DateTime dateBegin, DateTime dateEnd)
         {
-            DateTime firstDate = new DateTime(date.Year, date.Month, 1);
-            DateTime lastDate = new DateTime(date.Year, date.Month + 1, 1).AddDays(-1);
-        
-            var listWorkDTO = context.WorkReports.Where(x => x.UserId == id && x.Date >= firstDate && x.Date <= lastDate).ToList();
+            var listWorkDTO = context.WorkReports.Where(x => x.UserId == id && x.Date >= dateBegin && x.Date <= dateEnd).ToList();
             var listWork = mapper.Map<List<WorkReport>>(listWorkDTO);
             return listWork;
         }

@@ -34,7 +34,7 @@ namespace HoursWorkedAPI.Controllers
         /// Или сообщение об ошибке.
         /// </returns>
         [HttpGet]
-        [Route("/api/users/getall")]
+        [Route("/api/users")]
         public ActionResult<MainResponse> Get()
         {
             try
@@ -76,7 +76,7 @@ namespace HoursWorkedAPI.Controllers
         /// }
         /// </returns>
         [HttpPost]
-        [Route("/api/users/create")]
+        [Route("/api/users")]
         public ActionResult<MainResponse> Create(User user)
         {
             if (string.IsNullOrEmpty(user.Email))
@@ -124,27 +124,27 @@ namespace HoursWorkedAPI.Controllers
         /// }
         /// </returns>
         [HttpDelete]
-       [Route("/api/users/delete/{id}")]
-       public ActionResult<MainResponse> Delete(Guid id)
-       {
-           if (id == null)
-           {
-               return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id");
-           }
-           try
-           {
-                var result = userRepository.Delete(id);
-                if (result.Contains("Ошибка:"))
-                {
-                    return ResultResponse<string>.GetErrorResultResponse(result);
-                }
-                return ResultResponse<string>.GetSuccessResponse(result );
-           }
-           catch (Exception e)
-           {
-               return ResultResponse<string>.GetEmptyResultResponse(e.Message);
-           }
-       }
+        [Route("/api/users/{id}")]
+        public ActionResult<MainResponse> Delete(Guid id)
+        {
+            if (id == null)
+            {
+                return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id");
+            }
+            try
+            {
+                 var result = userRepository.Delete(id);
+                 if (result.Contains("Ошибка:"))
+                 {
+                     return ResultResponse<string>.GetErrorResultResponse(result);
+                 }
+                 return ResultResponse<string>.GetSuccessResponse(result );
+            }
+            catch (Exception e)
+            {
+                return ResultResponse<string>.GetEmptyResultResponse(e.Message);
+            }
+        }
 
         /// <summary>
         /// Изменение пользователя.
@@ -165,11 +165,11 @@ namespace HoursWorkedAPI.Controllers
         /// "resultCode": Код сообщения
         /// }
         /// </returns>
-        [HttpPost]
-       [Route("/api/users/update")]
-       public ActionResult<MainResponse> Update(User user)
-       {
-            if (user.UserId == Guid.Empty)
+        [HttpPut]
+        [Route("/api/users/{id}")]
+        public ActionResult<MainResponse> Update(Guid id, User user)
+        {
+            if (id == Guid.Empty)
             {
                 return ResultResponse<string>.GetEmptyResultResponse("Передан пустой id пользователя");
             }
@@ -187,22 +187,23 @@ namespace HoursWorkedAPI.Controllers
             }
             if (string.IsNullOrEmpty(user.FirstName))
             {
-                return ResultResponse<string>.GetEmptyResultResponse("Передано пустое Имя");
+               return ResultResponse<string>.GetEmptyResultResponse("Передано пустое Имя");
             }
             try
             {
-                 var result = userRepository.Update(user);
-
-                 if (result.Contains("Ошибка:"))
-                 {
-                     return ResultResponse<string>.GetErrorResultResponse(result);
-                 }
-                 return ResultResponse<string>.GetSuccessResponse(result);
+                user.UserId = id;
+                var result = userRepository.Update(user);
+                  
+                if (result.Contains("Ошибка:"))
+                {
+                    return ResultResponse<string>.GetErrorResultResponse(result);
+                }
+                return ResultResponse<string>.GetSuccessResponse(result);
             }
             catch (Exception e)
             {
                 return ResultResponse<string>.GetEmptyResultResponse(e.Message);
             }
-       }
+        }
     }
 }

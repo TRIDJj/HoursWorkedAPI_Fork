@@ -9,6 +9,6 @@ namespace HoursWorkedAPI.Repository.Interfaces
         string Create(WorkReport work);
         string Update(WorkReport work);
         string Delete(Guid id);
-        List<WorkReport> Get( Guid userId, DateTime date );
+        List<WorkReport> Get( Guid userId, DateTime dateBegin, DateTime dateEnd);
     }
 }
