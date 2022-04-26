@@ -1,4 +1,4 @@
-﻿using HoursWorkedAPI.DBData.DTOModels;
+﻿using HoursWorkedAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HoursWorkedAPI.DBData.Database
@@ -6,7 +6,7 @@ namespace HoursWorkedAPI.DBData.Database
     public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
-        public DbSet<UserDTO> Users { get; set; }
-        public DbSet<WorkReportDTO> WorkReports { get; set; }
+        public DbSet<UserModel> Users { get; set; }
+        public DbSet<WorkReportModel> WorkReports { get; set; }
     }
 }

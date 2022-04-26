@@ -1,7 +1,9 @@
 using HoursWorkedAPI.DBData.Database;
-using HoursWorkedAPI.Repositories.Interfaces;
-using HoursWorkedAPI.Repositories.Logics;
+using HoursWorkedAPI.Interfaces;
+using HoursWorkedAPI.Middleware;
+using HoursWorkedAPI.Repositories;
 using HoursWorkedAPI.Repositories.Mappers;
+using HoursWorkedAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,12 +28,18 @@ namespace HoursWorkedAPI
         {
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            
+            // Mssql
+            //services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            // Post
             services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
             
             services.AddAutoMapper(typeof(UserConfigureProfile));
             
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IWorkReportRepository, WorkReportRepository>();
+            services.AddTransient<UserRepository>();
+            services.AddTransient<WorkReportRepository>();
+            services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IWorkReportManager, WorkReportManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +57,8 @@ namespace HoursWorkedAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,16 +1,20 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HoursWorkedAPI.Models
 {
     public class WorkReportModel
     {
+
         [Required]
         public Guid Id { get; set; }
 
         [Required]
         public Guid UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public UserModel User{ get; set; }
 
         [Required]
         public string Note { get; set; }

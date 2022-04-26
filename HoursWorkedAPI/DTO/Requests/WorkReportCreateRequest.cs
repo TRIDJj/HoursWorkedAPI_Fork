@@ -1,5 +1,5 @@
 ﻿using System;
-using HoursWorkedAPI.Models;
+using HoursWorkedAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HoursWorkedAPI.DTO.Requests
@@ -8,6 +8,6 @@ namespace HoursWorkedAPI.DTO.Requests
     {
         [FromRoute(Name = "user-id")]
         public Guid UserId { get; set; }
-        public WorkReportModel WorkReport { get; set; }
+        public WorkReportViewModel WorkReport { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using HoursWorkedAPI.DBData.DTOModels;
 using HoursWorkedAPI.Models;
+using HoursWorkedAPI.ViewModels;
 
 namespace HoursWorkedAPI.Repositories.Mappers
 {
@@ -8,10 +8,10 @@ namespace HoursWorkedAPI.Repositories.Mappers
     {
         public UserConfigureProfile() 
         {
-            CreateMap<UserModel, UserDTO>();
-            CreateMap<UserDTO, UserModel>();
-            CreateMap<WorkReportModel, WorkReportDTO>();
-            CreateMap<WorkReportDTO, WorkReportModel>();
+            CreateMap<UserViewModel, UserModel>();
+            CreateMap<UserModel, UserViewModel>();
+            CreateMap<WorkReportViewModel, WorkReportModel>();
+            CreateMap<WorkReportModel, WorkReportViewModel>();
         }
     }
 }

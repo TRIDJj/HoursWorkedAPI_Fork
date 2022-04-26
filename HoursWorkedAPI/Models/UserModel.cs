@@ -1,15 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace HoursWorkedAPI.Models
-{   
+{
     public class UserModel
     {
         [Required]
+        [Key]
         public Guid UserId { get; set; }
-        
+
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

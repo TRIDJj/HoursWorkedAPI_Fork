@@ -1,17 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace HoursWorkedAPI.DBData.DTOModels
-{
-
-    public class UserDTO
+namespace HoursWorkedAPI.ViewModels
+{   
+    public class UserViewModel
     {
         [Required]
-        [Key]
         public Guid UserId { get; set; }
-
+        
         [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

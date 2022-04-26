@@ -1,11 +1,11 @@
 ﻿using System;
-using HoursWorkedAPI.Models;
+using HoursWorkedAPI.ViewModels;
 
 namespace HoursWorkedAPI.DTO.Requests
 {
     public class UserUpdateRequest
     {
         public Guid Id { get; set; } 
-        public UserModel User { get; set; }
+        public UserViewModel User { get; set; }
     }
 }
